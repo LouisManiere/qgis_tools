@@ -4,11 +4,11 @@ from qgis.core import QgsProject, QgsVectorLayer, QgsFeatureRequest
 
 # Chemins vers les fichiers GPKG
 source_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=troncon_hydrographique_corr_dir_ecoulement'
-cible_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=1_troncon_hydrographique_cours_d_eau_corr_conn_inv'
+cible_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=2_troncon_hydrographique_cours_d_eau_corr_conn_inv'
 
 # Charger les couches sources et cibles
 source_layer = QgsVectorLayer(source_gpkg, 'troncon_hydrographique_corr_dir_ecoulement', 'ogr')
-cible_layer = QgsVectorLayer(cible_gpkg, '1_troncon_hydrographique_cours_d_eau_corr_conn_inv', 'ogr')
+cible_layer = QgsVectorLayer(cible_gpkg, '2_troncon_hydrographique_cours_d_eau_corr_conn_inv', 'ogr')
 
 # Vérifier que les couches ont bien été chargées
 if not source_layer.isValid() or not cible_layer.isValid():
@@ -31,3 +31,4 @@ with edit(cible_layer):
         newgeom = QgsGeometry.fromPolylineXY(lines)
         # Mettre à jour la géométrie de l'entité
         cible_layer.changeGeometry(feature.id(), newgeom)
+        print(feature['cleabs'] + ' line direction inversed')
