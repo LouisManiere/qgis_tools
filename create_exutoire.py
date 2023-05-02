@@ -13,7 +13,7 @@ limite_terre_mer_name = 'limite_terre_mer'
 # outputs
 plan_d_eau_ligne_name = 'plan_d_eau_ligne_2'
 exutoire_name = 'exutoire_2'
-exutoire_buffer_name = f"{'exutoire_buffer_2'}{buffer_distance}"
+exutoire_buffer_name = f"{'exutoire_buffer'}{buffer_distance}{'_2'}"
 
 # pgkg file exutoire
 referentiel_exutoire_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_exutoires.gpkg'
