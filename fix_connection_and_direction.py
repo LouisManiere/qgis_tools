@@ -1,29 +1,30 @@
-# Importer les bibliothèques nécessaires
-from qgis.core import QgsProject, QgsVectorLayer, QgsFeatureRequest
+"""
+Add the features from the source_layer to the cible_layer the reverse the line
+"""
+
+from qgis.core import QgsVectorLayer, QgsFeatureRequest
 
 
-# Chemins vers les fichiers GPKG
-source_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=troncon_hydrographique_conn_dir_ecoulement'
+# Paths to files
+source_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=troncon_hydrographique_conn_corr_dir_ecoulement'
 cible_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=3_troncon_hydrographique_cours_d_eau_corr_conn_inv'
 
-# Charger les couches sources et cibles
-source_layer = QgsVectorLayer(source_gpkg, 'troncon_hydrographique_conn_dir_ecoulement', 'ogr')
+# Load layers
+source_layer = QgsVectorLayer(source_gpkg, 'troncon_hydrographique_conn_corr_dir_ecoulement', 'ogr')
 cible_layer = QgsVectorLayer(cible_gpkg, '3_troncon_hydrographique_cours_d_eau_corr_conn_inv', 'ogr')
 
-# Vérifier que les couches ont bien été chargées
+# Check if layers are valids
 if not source_layer.isValid() or not cible_layer.isValid():
     print('Une des couches n\'a pas été chargée correctement')
-    exit()
 
-# Récupérer les identifiants des entités dans la couche source
+# Get ids from source_layer
 identifiants = []
 for feature in source_layer.getFeatures():
-    identifiants.append("'" + feature['cleabs'] + "'") # Ajouter des guillemets autour de la valeur de l'identifiant
+    identifiants.append("'" + feature['cleabs'] + "'")
 
-# regarder si des identifiants sont déjà présent dans la couche source
+# check if there are already in the cible_layer
 nomodif = []
 for feature in cible_layer.getFeatures(QgsFeatureRequest().setFilterExpression('"cleabs" IN ({})'.format(','.join(identifiants)))):
-    # print(feature['cleabs'] + ' already exist')
     nomodif.append("'" + feature['cleabs'] + "'")
 nouvelle_liste = [id for id in identifiants + nomodif if id not in identifiants or id not in nomodif]
 if not nomodif:
@@ -31,24 +32,24 @@ if not nomodif:
 else :
     print('no features from the layer to fix, no check needed')
 
-# ajouter uniquement les entités qui ne sont pas déjà dans la couche source
+# Add the features not present in the cible_layer
 with edit(cible_layer):
-    # récupérer les entités de la couche source 
+    # get features from the source_layer 
     for feature in source_layer.getFeatures(QgsFeatureRequest().setFilterExpression('"cleabs" IN ({})'.format(','.join(nouvelle_liste)))):
         fet = QgsFeature(feature)
         fet['fid'] = None
         cible_layer.addFeatures([fet])
         print(fet['cleabs'] + ' line added')
 
-# Inverse les lignes d'écoulement pour les entités de source_layer
+# Reverse the flow direction for the features in the target layer
 with edit(cible_layer):
     for feature in cible_layer.getFeatures(QgsFeatureRequest().setFilterExpression('"cleabs" IN ({})'.format(','.join(identifiants)))):
-        # Récupérer la géométrie de l'entité
+        # Get the geometry of the feature
         geom = feature.geometry()
         lines = geom.asPolyline()
-        # Inverser les lignes d'écoulement
+        # Reverse the flow direction
         lines.reverse()
         newgeom = QgsGeometry.fromPolylineXY(lines)
-        # Mettre à jour la géométrie de l'entité
+        # Update the geometry of the feature
         cible_layer.changeGeometry(feature.id(), newgeom)
         print(feature['cleabs'] + ' line direction inversed')

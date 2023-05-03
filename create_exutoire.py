@@ -1,5 +1,9 @@
-# Importer les bibliothèques nécessaires
-from qgis.core import QgsProject, QgsVectorLayer, QgsFeatureRequest, QgsReadWriteContext, QgsProject, QgsVectorFileWriter
+"""
+From plan_d_eau, frontiere and limite_terre_mer prepared layers, create the plan_d_eau_ligne, the exutoire reference 
+layer and the exutoire refzerence with buffer.
+"""
+
+from qgis.core import QgsVectorLayer, QgsVectorFileWriter
 import processing
 
 # variable
@@ -11,9 +15,9 @@ plan_d_eau_name = 'plan_d_eau'
 frontiere_name = 'frontiere'
 limite_terre_mer_name = 'limite_terre_mer'
 # outputs
-plan_d_eau_ligne_name = 'plan_d_eau_ligne_2'
-exutoire_name = 'exutoire_2'
-exutoire_buffer_name = f"{'exutoire_buffer'}{buffer_distance}{'_2'}"
+plan_d_eau_ligne_name = 'plan_d_eau_ligne'
+exutoire_name = 'exutoire'
+exutoire_buffer_name = f"{'exutoire_buffer'}{buffer_distance}"
 
 # pgkg file exutoire
 referentiel_exutoire_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_exutoires.gpkg'
@@ -29,15 +33,16 @@ exutoire_buffer50_layer = f"{referentiel_exutoire_gpkg}|layername={exutoire_buff
 # EPSG
 crs = 'EPSG:2154'
 
-# Charger les couches sources et cibles
+# load layers
 plan_d_eau = QgsVectorLayer(plan_d_eau_layer, plan_d_eau_name, 'ogr')
 frontiere = QgsVectorLayer(frontiere_layer, frontiere_name, 'ogr')
 limite_terre_mer = QgsVectorLayer(limite_terre_mer_layer, limite_terre_mer_name, 'ogr')
 
-# Vérifier que les couches ont bien été chargées
+# Check if layers are valid
 if not plan_d_eau.isValid() or not frontiere.isValid() or not limite_terre_mer.isValid():
     print('Une des couches n\'a pas été chargée correctement')
 
+# Function to save a layer in an existing gpkg
 def saving_gpkg(layer, name, out_path):
     options = QgsVectorFileWriter.SaveVectorOptions()
     options.actionOnExistingFile = QgsVectorFileWriter.CreateOrOverwriteLayer
@@ -61,7 +66,7 @@ plan_d_eau_fix = processing.run('native:fixgeometries',
                         {'INPUT' : plan_d_eau,
                          'OUTPUT' : 'TEMPORARY_OUTPUT'})['OUTPUT']
 
-# plan d'eau vers ligne
+# plan_d_eau to line
 plan_d_eau_ligne = processing.run('native:polygonstolines',
                { 'INPUT' : plan_d_eau_fix, 
                 'OUTPUT' : 'TEMPORARY_OUTPUT' })['OUTPUT']
@@ -109,4 +114,4 @@ exutoire_buffer_fix = processing.run('native:fixgeometries',
 saving_gpkg(exutoire_buffer_fix, exutoire_buffer_name, referentiel_exutoire_gpkg)
 
 # script end
-print('referentiel_exutoire updated')
+print('referentiel_exutoires updated')
