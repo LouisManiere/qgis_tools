@@ -9,16 +9,15 @@ from qgis.core import QgsProject, QgsVectorLayer, QgsFeatureRequest
 
 # Paths to GPKG files
 source_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=troncon_hydrographique_cours_d_eau_modif_geom'
-cible_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=3_troncon_hydrographique_cours_d_eau_corr_conn_inv'
+cible_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=6_troncon_hydrographique_cours_d_eau_corr_conn_inv'
 
 # Load source and target layers
 source_layer = QgsVectorLayer(source_gpkg, 'troncon_hydrographique_cours_d_eau_modif_geom', 'ogr')
-cible_layer = QgsVectorLayer(cible_gpkg, '3_troncon_hydrographique_cours_d_eau_corr_conn_inv', 'ogr')
+cible_layer = QgsVectorLayer(cible_gpkg, '6_troncon_hydrographique_cours_d_eau_corr_conn_inv', 'ogr')
 
 # Check if layers are valid
 if not source_layer.isValid() or not cible_layer.isValid():
     print('One or more layers could not be loaded correctly')
-    exit()
 
 # Get identifiers of features in source layer
 identifiants = []

@@ -1,16 +1,16 @@
 """
 Add the features from the source_layer to the cible_layer
 """
-from qgis.core import QgsProject, QgsVectorLayer, QgsFeatureRequest
+from qgis.core import QgsVectorLayer, QgsFeatureRequest
 
 
 # path to pgkg files
 source_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=troncon_hydrographique_conn'
-cible_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=3_troncon_hydrographique_cours_d_eau_corr_conn_inv'
+cible_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=6_troncon_hydrographique_cours_d_eau_corr_conn_inv'
 
 # load layers
 source_layer = QgsVectorLayer(source_gpkg, 'troncon_hydrographique_conn', 'ogr')
-cible_layer = QgsVectorLayer(cible_gpkg, '3_troncon_hydrographique_cours_d_eau_corr_conn_inv', 'ogr')
+cible_layer = QgsVectorLayer(cible_gpkg, '6_troncon_hydrographique_cours_d_eau_corr_conn_inv', 'ogr')
 
 # check if layers are valid
 if not source_layer.isValid() or not cible_layer.isValid():

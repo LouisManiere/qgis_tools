@@ -7,11 +7,11 @@ from qgis.core import QgsVectorLayer, QgsFeatureRequest
 
 # Paths to files
 source_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=troncon_hydrographique_conn_corr_dir_ecoulement'
-cible_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=3_troncon_hydrographique_cours_d_eau_corr_conn_inv'
+cible_gpkg = 'C:/Users/lmanie01/Documents/Projets/Mapdo/Data/fct/referentiel_hydrographique.gpkg|layername=6_troncon_hydrographique_cours_d_eau_corr_conn_inv'
 
 # Load layers
 source_layer = QgsVectorLayer(source_gpkg, 'troncon_hydrographique_conn_corr_dir_ecoulement', 'ogr')
-cible_layer = QgsVectorLayer(cible_gpkg, '3_troncon_hydrographique_cours_d_eau_corr_conn_inv', 'ogr')
+cible_layer = QgsVectorLayer(cible_gpkg, '6_troncon_hydrographique_cours_d_eau_corr_conn_inv', 'ogr')
 
 # Check if layers are valids
 if not source_layer.isValid() or not cible_layer.isValid():
